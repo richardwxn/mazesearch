@@ -44,6 +44,7 @@ public class AstarGhost{
 		maze.start.distancesofar=0;
 		Ghost start=new Ghost(maze.start,maze.ghostposition,1);
 		start.ghost=maze.ghostposition;
+		start.ghost.ghostdirection=true;
 		frontier.add(start);
 		visited.add(start);
 		pathto.put(start, new ArrayList<Ghost>(Arrays.asList(start)));
@@ -52,8 +53,8 @@ public class AstarGhost{
 //			Make use of the priorityqueue
 			Ghost cur=frontier.poll();
 			List<Ghost> prev=new ArrayList<Ghost>(pathto.get(cur));
-			visited.add(cur);
-//			System.out.println(cur);
+			if(!visited.add(cur))
+				System.out.println("false"+cur);
 			int failurecount=0;
 			for(Ghost node:cur.setneighbour(maze)){
 				if(node.empty&&!visited.contains(node)){
@@ -63,13 +64,13 @@ public class AstarGhost{
 					frontier.add(node);
 					prev.add(node);
 					pathto.put(node, prev);
-					if(node.pacman==maze.end){
+					if(node.pacman.equals(maze.end)){
 						System.out.println(nodesnumber);
 						return node;
 					}
 						
 				}
-				else{
+				else if(node.danger){
 					failurecount++;
 					if(failurecount==4){
 						for(Ghost sb:visited)
@@ -82,7 +83,8 @@ public class AstarGhost{
 			}
 			
 		}
-	
+//		for(Ghost sb:visited)
+//			System.out.println(sb);
 		return null;
 	}
 	

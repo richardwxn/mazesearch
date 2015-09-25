@@ -14,6 +14,7 @@ public class MazeNode{
 //		NORTH,SOUTH,WEST,EAST
 //	}
 //	double heuristic;
+	boolean ghostdirection=true;
 	double distancesofar=0;
 	double costofdirection=0;
 	MazeNode [] neighbour;
@@ -38,10 +39,24 @@ public class MazeNode{
 	
 //	For the part that has ghosts
 	public MazeNode move(Maze maze){
-		if(maze.mazenode[i][j+1].empty)
-			return new MazeNode(i,j+1,true);
-		else
-			return new MazeNode(i,j-1,true);
+		if(ghostdirection){
+			if(maze.mazenode[i][j+1].empty)
+				return new MazeNode(i,j+1,true);
+			else{
+				MazeNode temp=new MazeNode(i,j-1,true);
+				temp.ghostdirection=false;
+				return temp;
+			}
+		}
+		else{
+			if(maze.mazenode[i][j-1].empty)
+				return new MazeNode(i,j-1,true);
+			else{
+				MazeNode temp2=new MazeNode(i,j+1,true);
+				temp2.ghostdirection=true;
+				return temp2;
+			}
+		}
 	}
 
 	

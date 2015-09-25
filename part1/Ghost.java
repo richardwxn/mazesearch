@@ -14,8 +14,11 @@ public class Ghost {
 	Ghost[] neighbour;
 	Heuristic heuristic;
 	boolean empty=false;
+	boolean danger=false;
+//	True means from left to right, false from right to left
+	boolean ghostdirection=true;
 	public Ghost(MazeNode pacman, MazeNode Ghost,double distancesofar){
-		this.pacman=pacman;
+		this.pacman=new MazeNode(pacman);
 		this.ghost=Ghost;
 		this.distancesofar=distancesofar;
 		this.empty=pacman.empty;
@@ -50,19 +53,20 @@ public class Ghost {
 //		ghost=maze.ghostposition;
 //		
 		MazeNode temp=new MazeNode(ghost.move(maze));
+		System.out.println(temp.j);
 		neighbour[0]=new Ghost(maze.mazenode[i+1][j],temp,pacman.distancesofar);
 		if(neighbour[0].lose()||(temp==pacman&&ghost==maze.mazenode[i+1][j]))
-			neighbour[0].empty=false;
+			neighbour[0].danger=true;
 				
 		neighbour[1]=new Ghost(maze.mazenode[i-1][j],temp,pacman.distancesofar);
 		if(neighbour[1].lose()||(temp==pacman&&ghost==maze.mazenode[i-1][j]))
-			neighbour[1].empty=false;	
+			neighbour[1].danger=true;	
 		neighbour[2]=new Ghost(maze.mazenode[i][j+1],temp,pacman.distancesofar);
 		if(neighbour[2].lose()||(temp==pacman&&ghost==maze.mazenode[i][j+1]))
-			neighbour[2].empty=false;
+			neighbour[2].danger=true;
 		neighbour[3]=new Ghost(maze.mazenode[i][j+1],temp,pacman.distancesofar);
 		if(neighbour[3].lose()||(temp==pacman&&ghost==maze.mazenode[i][j+1]))
-			neighbour[3].empty=false;		
+			neighbour[3].danger=true;		
 		return neighbour;
 	}
 
