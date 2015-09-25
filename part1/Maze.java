@@ -33,7 +33,7 @@ public class Maze {
 //	Use another method to do input and count number of lines
 	List<String> lines=null;
 	try{
-	 lines= Files.readAllLines(Paths.get("/Users/newuser/Documents/CS440AI/smallGhost.txt"), Charset.defaultCharset());
+	 lines= Files.readAllLines(Paths.get("/Users/newuser/Documents/CS440AI/bigGhost.txt"), Charset.defaultCharset());
 	}catch(FileNotFoundException s){
 		s.printStackTrace();
 	}
@@ -44,7 +44,7 @@ public class Maze {
 	mazenode=new MazeNode[row][col];
 //  This part is to decide character
 	try{
-		File file=new File("/Users/newuser/Documents/CS440AI/smallGhost.txt");
+		File file=new File("/Users/newuser/Documents/CS440AI/bigGhost.txt");
 		fr=new FileReader(file);
 	}catch(FileNotFoundException e){
 		e.printStackTrace();

@@ -52,7 +52,7 @@ public class Ghost {
 		int j=pacman.j;
 //		ghost=maze.ghostposition;
 //		
-		MazeNode temp=new MazeNode(ghost.move(maze));
+		MazeNode temp=ghost.move(maze);
 		System.out.println(temp.j);
 		neighbour[0]=new Ghost(maze.mazenode[i+1][j],temp,pacman.distancesofar);
 		if(neighbour[0].lose()||(temp==pacman&&ghost==maze.mazenode[i+1][j]))
@@ -61,7 +61,7 @@ public class Ghost {
 		neighbour[1]=new Ghost(maze.mazenode[i-1][j],temp,pacman.distancesofar);
 		if(neighbour[1].lose()||(temp==pacman&&ghost==maze.mazenode[i-1][j]))
 			neighbour[1].danger=true;	
-		neighbour[2]=new Ghost(maze.mazenode[i][j+1],temp,pacman.distancesofar);
+		neighbour[2]=new Ghost(maze.mazenode[i][j-1],temp,pacman.distancesofar);
 		if(neighbour[2].lose()||(temp==pacman&&ghost==maze.mazenode[i][j+1]))
 			neighbour[2].danger=true;
 		neighbour[3]=new Ghost(maze.mazenode[i][j+1],temp,pacman.distancesofar);

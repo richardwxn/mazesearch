@@ -49,12 +49,14 @@ public class MazeNode{
 			}
 		}
 		else{
-			if(maze.mazenode[i][j-1].empty)
-				return new MazeNode(i,j-1,true);
-			else{
-				MazeNode temp2=new MazeNode(i,j+1,true);
-				temp2.ghostdirection=true;
+			if(maze.mazenode[i][j-1].empty){
+				MazeNode temp2=new MazeNode(i,j-1,true);
+				temp2.ghostdirection=false;
 				return temp2;
+			}
+			else{
+				return new MazeNode(i,j+1,true);
+				
 			}
 		}
 	}

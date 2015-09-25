@@ -147,7 +147,7 @@ public class Main {
 //		This part for Astar search with ghost
 		AstarGhost astarghost=new AstarGhost(maze);
 		Ghost result=astarghost.Search(maze);
-		System.out.println(result==null);
+		System.out.println(result.pacman.i+"\t"+result.pacman.j);
 		
 	}
 
