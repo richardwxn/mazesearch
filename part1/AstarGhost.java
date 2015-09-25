@@ -1,6 +1,12 @@
 package part1;
 
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
@@ -18,15 +24,26 @@ public class AstarGhost{
 	Map<Ghost,List<Ghost>> pathto;
 	double distance=0;
 	public AstarGhost(Maze maze){
-		Comparator<Ghost> comparator=new Ghostcomparator();
+		Comparator<Ghost> comparator=new Ghostcomparator(maze);
 		frontier=new PriorityQueue<Ghost>(maze.row*maze.col,comparator);	
 		pathto=new HashMap<Ghost,List<Ghost>>();
 		visited=new HashSet<Ghost>();
 	}
 	
-	public Ghost Search(Maze maze){	
+	public Ghost Search(Maze maze) throws IOException{	
+//	  For output	
+		try{
+			File file=new File("/Users/newuser/Documents/CS440AI/smallghostresult.txt");
+			FileWriter fr=new FileWriter(file,false);
+		}catch(FileNotFoundException e){
+			e.printStackTrace();
+		}
+
+		
+//		
 		maze.start.distancesofar=0;
 		Ghost start=new Ghost(maze.start,maze.ghostposition,1);
+		start.ghost=maze.ghostposition;
 		frontier.add(start);
 		visited.add(start);
 		pathto.put(start, new ArrayList<Ghost>(Arrays.asList(start)));
@@ -36,7 +53,7 @@ public class AstarGhost{
 			Ghost cur=frontier.poll();
 			List<Ghost> prev=new ArrayList<Ghost>(pathto.get(cur));
 			visited.add(cur);
-			System.out.println(cur);
+//			System.out.println(cur);
 			int failurecount=0;
 			for(Ghost node:cur.setneighbour(maze)){
 				if(node.empty&&!visited.contains(node)){
@@ -55,6 +72,8 @@ public class AstarGhost{
 				else{
 					failurecount++;
 					if(failurecount==4){
+						for(Ghost sb:visited)
+							System.out.println(sb);
 						System.out.println("You lose the game");
 						return null;
 					}
@@ -63,6 +82,7 @@ public class AstarGhost{
 			}
 			
 		}
+	
 		return null;
 	}
 	

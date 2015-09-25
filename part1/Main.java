@@ -27,13 +27,9 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class Main {
-//	boolean [][] place;
 
 	Set<MazeNode> visited;
-//	List<Integer> start=new ArrayList<Integer>();
-//	List<Integer> end=new ArrayList<Integer>();
 	Map<MazeNode,List<MazeNode>> pathto;
-//	Map<MazeNode,Double> hero=new HashMap<MazeNode,Double>();
 	
 	public Main() throws IOException{
 //	input
@@ -55,12 +51,6 @@ public class Main {
 			visited.add(cur);
 //			Update route record
 			List<MazeNode> prev=new ArrayList<MazeNode>(pathto.get(cur));
-					
-//			decide whether to end the loop
-//			if(visited.contains(maze.end)){
-//				List<MazeNode> result=pathto.get(maze.end);
-//				break;
-//			}
 
 			for(MazeNode node:cur.setneighbour(maze)){
 				if(node.gettype()&&!visited.contains(node)){
@@ -150,8 +140,13 @@ public class Main {
 //		System.out.print(result.i+"|"+result.j);
 	    
 //		This part for Astar search with multiple dots
-		AstarDots astardots=new AstarDots(maze);
-		State result=astardots.Search(maze);
+//		AstarDots astardots=new AstarDots(maze);
+//		State result=astardots.Search(maze);
+//		System.out.println(result==null);
+		
+//		This part for Astar search with ghost
+		AstarGhost astarghost=new AstarGhost(maze);
+		Ghost result=astarghost.Search(maze);
 		System.out.println(result==null);
 		
 	}

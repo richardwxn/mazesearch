@@ -29,19 +29,11 @@ public class Maze {
 	public Maze() throws IOException{
 		dot=new ArrayList<MazeNode>();
 		builder=new StringBuilder();
-//  First Input	
-//	try{
-//	File file=new File("/Users/newuser/Documents/CS440AI/mediumMaze.txt");
-//	fr=new FileReader(file);	
-//	}catch(FileNotFoundException ex){
-//		Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
-//	}
-//	BufferedReader br=new BufferedReader(fr);
 
 //	Use another method to do input and count number of lines
 	List<String> lines=null;
 	try{
-	 lines= Files.readAllLines(Paths.get("/Users/newuser/Documents/CS440AI/tinySearch.txt"), Charset.defaultCharset());
+	 lines= Files.readAllLines(Paths.get("/Users/newuser/Documents/CS440AI/smallGhost.txt"), Charset.defaultCharset());
 	}catch(FileNotFoundException s){
 		s.printStackTrace();
 	}
@@ -52,7 +44,7 @@ public class Maze {
 	mazenode=new MazeNode[row][col];
 //  This part is to decide character
 	try{
-		File file=new File("/Users/newuser/Documents/CS440AI/tinySearch.txt");
+		File file=new File("/Users/newuser/Documents/CS440AI/smallGhost.txt");
 		fr=new FileReader(file);
 	}catch(FileNotFoundException e){
 		e.printStackTrace();
@@ -63,11 +55,12 @@ public class Maze {
 	while((sb=br.readLine())!=null){	
 		
 		for(int j=0;j<sb.length();j++){
+			builder.append(sb.charAt(j));
 			if(sb.charAt(j)=='%'){
-//				builder.append(sb.charAt(j));
+				
 				mazenode[i][j]=new MazeNode(i,j,false);
 			}
-			else if(sb.charAt(j)==' '){
+			else if(sb.charAt(j)==' '||sb.charAt(j)=='g'){
 //				builder.append(sb.charAt(j));
 				mazenode[i][j]=new MazeNode(i,j,true);
 			}
@@ -78,15 +71,15 @@ public class Maze {
 			}
 			else if(sb.charAt(j)=='.'){
 //				The below three lines are for basic pathfinding case
-//				end=new MazeNode(i,j,true);
-//				end.dot=true;
-//				mazenode[i][j]=end;
+				end=new MazeNode(i,j,true);
+				end.dot=true;
+				mazenode[i][j]=end;
 				
 //				The below lines are for state: which means multiple dots exist
-				MazeNode dotnode=new MazeNode(i,j,true);
-				dotnode.dot=true;
-				mazenode[i][j]=dotnode;
-				dot.add(dotnode);
+//				MazeNode dotnode=new MazeNode(i,j,true);
+//				dotnode.dot=true;
+//				mazenode[i][j]=dotnode;
+//				dot.add(dotnode);
 				
 			}
 //			The below branch for games with ghost

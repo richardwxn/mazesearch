@@ -43,6 +43,9 @@ public class MazeNode{
 		else
 			return new MazeNode(i,j-1,true);
 	}
+
+	
+// Calculate heuristics
 	public double calculateheuristic(Maze maze){	
 		return Math.abs(maze.end.i-i)+Math.abs(maze.end.j-j);
 	}

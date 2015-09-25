@@ -47,8 +47,9 @@ public class Ghost {
 		int i=pacman.i;
 		int count=0;
 		int j=pacman.j;
+//		ghost=maze.ghostposition;
 //		
-		MazeNode temp=ghost.move(maze);
+		MazeNode temp=new MazeNode(ghost.move(maze));
 		neighbour[0]=new Ghost(maze.mazenode[i+1][j],temp,pacman.distancesofar);
 		if(neighbour[0].lose()||(temp==pacman&&ghost==maze.mazenode[i+1][j]))
 			neighbour[0].empty=false;
