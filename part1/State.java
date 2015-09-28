@@ -12,27 +12,44 @@ public class State {
 	ArrayList<MazeNode> dotposition;
 	double distancesofar=0;
 	State[] neighbour;
+	MazeNode lostdot;
 	Heuristic heuristic;
 	boolean empty=false;
 	public State(MazeNode pacman, ArrayList<MazeNode> dotposition,double distancesofar){
 		this.pacman=new MazeNode(pacman);
-		this.dotposition=dotposition;
+		this.dotposition=new ArrayList<MazeNode>(dotposition);
 		this.distancesofar=distancesofar;
 		this.empty=pacman.empty;
 	}
 	public State(State copy){
-		this.pacman=copy.pacman;
-		this.dotposition=copy.dotposition;
+		this.pacman=new MazeNode(copy.pacman);
+		this.dotposition=new ArrayList<MazeNode>(copy.dotposition);
 		this.distancesofar=copy.distancesofar;
 		this.empty=copy.pacman.empty;
 	}
 
 	public double calculateheuristic(Maze maze){	
+		MazeNode temp=new MazeNode(pacman.i,pacman.j,true);
 		double min=Integer.MAX_VALUE;
+		double max=Integer.MIN_VALUE;
+		double mintoend=Integer.MAX_VALUE;
+		double sum=0;
 		for(MazeNode dot:this.dotposition){
 			min=Math.min(manhattendistance(pacman,dot), min);
 		}
-		return min+dotposition.size()+distancesofar;
+		for(MazeNode dot:this.dotposition){
+			if(manhattendistance(pacman,dot)>max)
+				temp=new MazeNode(dot);
+			max=Math.max(manhattendistance(pacman,dot), max);
+		}
+		
+		for(MazeNode dot:this.dotposition){
+			mintoend=Math.min(manhattendistance(pacman,maze.end), min);
+			sum+=manhattendistance(temp, dot);
+		}
+		
+//		return manhattendistance(temp, maze.end)+max+dotposition.size()+distancesofar;
+		return 1.1*sum+dotposition.size()+distancesofar;
 	}
 	
 	public double manhattendistance(MazeNode pacman,MazeNode dot){
@@ -73,7 +90,7 @@ public class State {
 		}
 		
 //		
-		neighbour[3]=new State(maze.mazenode[i][j+1],dotposition,pacman.distancesofar);
+		neighbour[3]=new State(maze.mazenode[i][j-1],dotposition,pacman.distancesofar);
 		if(maze.mazenode[i][j-1].isdot()){
 //			dotposition.remove(new MazeNode(i,j-1,true));	
 			neighbour[3].dotposition.remove(maze.mazenode[i][j-1]);
@@ -87,13 +104,13 @@ public class State {
 
 //	@Override
 //	public int hashCode() {
-//		return 31;
-////		final int prime = 31;
-////		int result = 1;
-////		result = prime * result
-////				+ ((dotposition == null) ? 0 : dotposition.hashCode());
-////		result = prime * result + ((pacman == null) ? 0 : pacman.hashCode());
-////		return result;
+////		return 31;
+//		final int prime = 31;
+//		int result = 1;
+//		result = prime * result
+//				+ ((dotposition == null) ? 0 : dotposition.hashCode());
+//		result = prime * result + ((pacman == null) ? 0 : pacman.hashCode());
+//		return result;
 //	}
 
 
@@ -133,8 +150,9 @@ public class State {
 		if(!(obj instanceof State))
 			return false;
 		State sb=(State)obj;
-		if(sb.pacman.equals(this.pacman)&&sb.dotposition.containsAll(this.dotposition)&&this.dotposition.containsAll(sb.dotposition))
-//		if(sb.pacman.equals(this.pacman))
+//		if(sb.pacman.equals(this.pacman)&&sb.dotposition.containsAll(this.dotposition)&&this.dotposition.containsAll(sb.dotposition))
+			
+		if(sb.pacman.equals(this.pacman)&&sb.dotposition.size()==this.dotposition.size())
 			return true;
 		return false;
 		

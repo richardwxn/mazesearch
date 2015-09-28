@@ -16,37 +16,36 @@ public class AstarSearch {
 	Set<MazeNode> visited;
 	Map<MazeNode,List<MazeNode>> pathto;
 	double distance=0;
+	Map<MazeNode,MazeNode> predecessor;
 	public AstarSearch(Maze maze){
 		Comparator<MazeNode> comparator=new Newcomparator(maze);
 		frontier=new PriorityQueue<MazeNode>(maze.row*maze.col,comparator);	
 		pathto=new HashMap<MazeNode,List<MazeNode>>();
 		visited=new HashSet<MazeNode>();
+		predecessor=new HashMap<MazeNode,MazeNode>();
 	}
 	
 	public MazeNode Search(Maze maze){	
 		maze.start.distancesofar=0;
 		frontier.add(maze.start);
 		visited.add(maze.start);
-		pathto.put(maze.start, new ArrayList<MazeNode>(Arrays.asList(maze.start)));
-		int nodesnumber=1;
+//		pathto.put(maze.start, new ArrayList<MazeNode>(Arrays.asList(maze.start)));
+		int nodesnumber=0;
 		while(!frontier.isEmpty()){
 //			Make use of the priorityqueue
 			MazeNode cur=frontier.poll();
-			List<MazeNode> prev=new ArrayList<MazeNode>(pathto.get(cur));
+			nodesnumber++;
 			visited.add(cur);
-			System.out.println(cur);
 			distance++;
 			for(MazeNode node:cur.setneighbour(maze)){
 				if(node.empty&&!visited.contains(node)){
-//					System.out.println(nodesnumber);
-					nodesnumber++;
+					
 //					This part changes for different cost function
-					node.distancesofar=cur.distancesofar+node.costofdirection;
+					node.distancesofar=cur.distancesofar+1;
 					frontier.add(node);
-					prev.add(node);
-					pathto.put(node, prev);
+					predecessor.put(node, cur);
 					if(node==maze.end){
-						System.out.println(nodesnumber);
+						System.out.println("Expanded Nodes Number:"+nodesnumber);
 						return node;
 					}
 						
@@ -55,6 +54,22 @@ public class AstarSearch {
 			
 		}
 		return null;
+	}
+	
+	public int printsolution(Maze maze, MazeNode result){
+//		File file=new File()
+		int distance = 0;
+		Maze copy=new Maze(maze);
+		while(predecessor.containsKey(result)) {
+			distance++;
+			result = predecessor.get(result);
+			int index=(maze.col+1)*result.i+result.j;
+			if(!result.equals(maze.start))			
+				copy.builder.setCharAt(index, '.');
+
+		}
+		System.out.println(copy.builder.toString());
+		return distance;
 	}
 	
 	public double getdistance(Maze maze,MazeNode node){

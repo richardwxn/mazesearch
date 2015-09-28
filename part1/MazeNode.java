@@ -29,6 +29,7 @@ public class MazeNode{
 		this.j=node.j;
 		this.empty=node.empty;
 		this.dot=node.dot;
+		this.ghostdirection=node.ghostdirection;
 	}
 	public boolean gettype(){
 		return empty;
@@ -60,7 +61,7 @@ public class MazeNode{
 			}
 		}
 	}
-
+	
 	
 // Calculate heuristics
 	public double calculateheuristic(Maze maze){	
@@ -91,7 +92,7 @@ public class MazeNode{
 //		neighbour[3]=new MazeNode(maze.mazenode[i][j-1]);	
 		neighbour[3].direction=false;
 		for(int i=0;i<4;i++)
-			neighbour[i].costofdirection=(this.direction!=neighbour[i].direction?3:1);
+			neighbour[i].costofdirection=(this.direction!=neighbour[i].direction?1:1);
 //			neighbour[i].costofdirection=0;
 		return neighbour;
 	}

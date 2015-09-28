@@ -19,12 +19,12 @@ public class Ghost {
 	boolean ghostdirection=true;
 	public Ghost(MazeNode pacman, MazeNode Ghost,double distancesofar){
 		this.pacman=new MazeNode(pacman);
-		this.ghost=Ghost;
+		this.ghost=new MazeNode(Ghost);
 		this.distancesofar=distancesofar;
 		this.empty=pacman.empty;
 	}
 	public Ghost(Ghost copy){
-		this.pacman=copy.pacman;
+		this.pacman=new MazeNode(copy.pacman);
 		this.distancesofar=copy.distancesofar;
 		this.ghost=copy.ghost;
 		this.empty=copy.empty;
@@ -53,7 +53,6 @@ public class Ghost {
 //		ghost=maze.ghostposition;
 //		
 		MazeNode temp=ghost.move(maze);
-		System.out.println(temp.j);
 		neighbour[0]=new Ghost(maze.mazenode[i+1][j],temp,pacman.distancesofar);
 		if(neighbour[0].lose()||(temp==pacman&&ghost==maze.mazenode[i+1][j]))
 			neighbour[0].danger=true;
@@ -65,7 +64,7 @@ public class Ghost {
 		if(neighbour[2].lose()||(temp==pacman&&ghost==maze.mazenode[i][j+1]))
 			neighbour[2].danger=true;
 		neighbour[3]=new Ghost(maze.mazenode[i][j+1],temp,pacman.distancesofar);
-		if(neighbour[3].lose()||(temp==pacman&&ghost==maze.mazenode[i][j+1]))
+		if(neighbour[3].lose()||(temp==pacman&&ghost==maze.mazenode[i][j-1]))
 			neighbour[3].danger=true;		
 		return neighbour;
 	}

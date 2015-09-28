@@ -29,19 +29,21 @@ import java.util.logging.Logger;
 public class Main {
 
 	Set<MazeNode> visited;
-	Map<MazeNode,List<MazeNode>> pathto;
+	static Map<MazeNode,List<MazeNode>> pathto;
+	Map<MazeNode, MazeNode> predecessor;
 	
 	public Main() throws IOException{
 //	input
 		visited=new HashSet<MazeNode>();
-		pathto=new HashMap<MazeNode,List<MazeNode>>();	
+		pathto=new HashMap<MazeNode,List<MazeNode>>();
+		predecessor=new HashMap<MazeNode, MazeNode>();
 	}
 
-	public void BFSsearch(Maze maze){
+	public MazeNode BFSsearch(Maze maze){
+		Maze copy=new Maze(maze);
 		int nodesnumber=0;
 //		Put the first start point into visted
-		visited.add(maze.start);
-		
+		visited.add(maze.start);	
 		List<MazeNode> frontier=new LinkedList<MazeNode>();
 		frontier.add(maze.start);
 		pathto.put(maze.start, new ArrayList<MazeNode>(Arrays.asList(maze.start)));
@@ -49,56 +51,65 @@ public class Main {
 			MazeNode cur=frontier.remove(0);
 			nodesnumber++;
 			visited.add(cur);
+
 //			Update route record
-			List<MazeNode> prev=new ArrayList<MazeNode>(pathto.get(cur));
+//			List<MazeNode> prev=new ArrayList<MazeNode>(pathto.get(cur));
 
 			for(MazeNode node:cur.setneighbour(maze)){
-				if(node.gettype()&&!visited.contains(node)){
-//					System.out.println(nodesnumber);
-					prev.add(node);
-					pathto.put(node, prev);
+				if(node.gettype()&&!visited.contains(node)){					
+					predecessor.put(node, cur);				
 					frontier.add(node);
 					if(node.equals(maze.end)){
 						System.out.println(nodesnumber);
-						System.out.println(pathto.get(node));
-						return;
+						return node;
 					}
 					
 				}
 			}
 
 		}
-		
+		return null;
 	}
-	
-	public void DFSsearch(Maze maze){
-//		Stack<MazeNode> stack=new Stack<MazeNode>();
-//		stack.push(start);
+	public int printsolution(Maze maze, MazeNode result){
+//		File file=new File()
+		int distance = 0;
+		Maze copy=new Maze(maze);
+		while(predecessor.containsKey(result)) {
+			distance++;
+			result = predecessor.get(result);
+			int index=(maze.col+1)*result.i+result.j;
+			if(!result.equals(maze.start))			
+				copy.builder.setCharAt(index, '.');
+
+		}
+		System.out.println(copy.builder.toString());
+		return distance;
+	}
+	public MazeNode DFSsearch(Maze maze){
 		int nodesnumber=0;
 		Stack<MazeNode> frontier=new Stack<MazeNode>();
 		visited.add(maze.start);
 		frontier.push(maze.start);
-		pathto.put(maze.start, new ArrayList<MazeNode>(Arrays.asList(maze.start)));
+//		pathto.put(maze.start, new ArrayList<MazeNode>(Arrays.asList(maze.start)));
 			while(!frontier.isEmpty()){
 				MazeNode cur=frontier.pop();
+				nodesnumber++;
 				visited.add(cur);
-				List<MazeNode> prev=new ArrayList<MazeNode>(pathto.get(cur));
+//				List<MazeNode> prev=new ArrayList<MazeNode>(pathto.get(cur));
 			for(MazeNode node:cur.setneighbour(maze)){				
 				if(node.gettype()&&!visited.contains(node)){
-					nodesnumber++;
-					System.out.println(nodesnumber);
-					prev.add(node);
-					pathto.put(node, prev);
+					
+					predecessor.put(node, cur);	
 					frontier.add(node);
 					if(node.equals(maze.end)){
-						System.out.println(nodesnumber);
-						System.out.println(pathto.get(node));
-						return;
+						System.out.println("Expanded Nodes Number:"+nodesnumber);
+						return node;
 					}
 				}
 				
 			}	
 			}
+			return null;
 	}
 
 		
@@ -114,14 +125,17 @@ public class Main {
 		int nodesnumber=0;
 		while(!frontier.isEmpty()){
 		MazeNode cur=frontier.poll();
+		nodesnumber++;
 		visited.add(cur);
 		for(MazeNode node:cur.setneighbour(maze)){
 			if(node.gettype()&&!visited.contains(node)){
-					nodesnumber++;
-					System.out.println(nodesnumber);
 					frontier.add(node);
-					if(node.equals(maze.end))
+					
+					predecessor.put(node, cur);	
+					if(node.equals(maze.end)){
+						System.out.println("Expanded Nodes Number:"+nodesnumber);
 						return node;
+					}
 			}		
 		}
 		}
@@ -132,22 +146,36 @@ public class Main {
 	public static void main(String[] args) throws IOException{
 		Main test=new Main();
 		Maze maze=new Maze();
-//		System.out.print(maze.toString());
 		
+		/*
+		 * basic pathfinding for dfs, bfs and greedy
+		 * 
+		 */
+//		MazeNode result=test.BFSsearch(maze);		
+//		MazeNode result=test.DFSsearch(maze);
+//		MazeNode result=test.Greedy(maze);
+		
+	
 //		This part for Astar search with only one dot
 //		AstarSearch astar=new AstarSearch(maze);
 //		MazeNode result=astar.Search(maze);	
-//		System.out.print(result.i+"|"+result.j);
+//		int nodes=astar.printsolution(maze, result);
+//		System.out.print("pathcost:"+nodes);
 	    
 //		This part for Astar search with multiple dots
 //		AstarDots astardots=new AstarDots(maze);
 //		State result=astardots.Search(maze);
-//		System.out.println(result==null);
+//		int nodes=astardots.printsolution(maze, result);
+//		if(result!=null)
+//		System.out.print("pathcost:"+nodes);
+		
 		
 //		This part for Astar search with ghost
 		AstarGhost astarghost=new AstarGhost(maze);
 		Ghost result=astarghost.Search(maze);
-		System.out.println(result.pacman.i+"\t"+result.pacman.j);
+		int nodes=astarghost.printsolution(maze, result);
+		System.out.print("pathcost:"+nodes);
+//		System.out.println(result.pacman.i+"\t"+result.pacman.j);
 		
 	}
 
