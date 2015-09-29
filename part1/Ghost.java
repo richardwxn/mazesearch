@@ -10,6 +10,7 @@ public class Ghost {
 //	double heuristic;
 	MazeNode pacman;
 	MazeNode ghost;
+	MazeNode ghost2;
 	double distancesofar=0;
 	Ghost[] neighbour;
 	Heuristic heuristic;
@@ -17,9 +18,10 @@ public class Ghost {
 	boolean danger=false;
 //	True means from left to right, false from right to left
 	boolean ghostdirection=true;
-	public Ghost(MazeNode pacman, MazeNode Ghost,double distancesofar){
+	public Ghost(MazeNode pacman, MazeNode Ghost,MazeNode Ghost2,double distancesofar){
 		this.pacman=new MazeNode(pacman);
 		this.ghost=new MazeNode(Ghost);
+		this.ghost2=new MazeNode(Ghost2);
 		this.distancesofar=distancesofar;
 		this.empty=pacman.empty;
 	}
@@ -27,10 +29,11 @@ public class Ghost {
 		this.pacman=new MazeNode(copy.pacman);
 		this.distancesofar=copy.distancesofar;
 		this.ghost=copy.ghost;
+		this.ghost2=copy.ghost2;
 		this.empty=copy.empty;
 	}
 	public boolean lose(){
-		if(pacman.equals(ghost))
+		if(pacman.equals(ghost)||pacman.equals(ghost2))
 			return true;
 		return false;
 	}
@@ -53,18 +56,19 @@ public class Ghost {
 //		ghost=maze.ghostposition;
 //		
 		MazeNode temp=ghost.move(maze);
-		neighbour[0]=new Ghost(maze.mazenode[i+1][j],temp,pacman.distancesofar);
-		if(neighbour[0].lose()||(temp==pacman&&ghost==maze.mazenode[i+1][j]))
+		MazeNode temp2=ghost.move2(maze);
+		neighbour[0]=new Ghost(maze.mazenode[i+1][j],temp,temp2,pacman.distancesofar);
+		if(neighbour[0].lose()||(temp==pacman&&ghost==maze.mazenode[i+1][j])||(temp2==pacman&&ghost2==maze.mazenode[i+1][j]))
 			neighbour[0].danger=true;
 				
-		neighbour[1]=new Ghost(maze.mazenode[i-1][j],temp,pacman.distancesofar);
-		if(neighbour[1].lose()||(temp==pacman&&ghost==maze.mazenode[i-1][j]))
+		neighbour[1]=new Ghost(maze.mazenode[i-1][j],temp,temp2,pacman.distancesofar);
+		if(neighbour[1].lose()||(temp==pacman&&ghost==maze.mazenode[i-1][j])||(temp2==pacman&&ghost2==maze.mazenode[i+1][j]))
 			neighbour[1].danger=true;	
-		neighbour[2]=new Ghost(maze.mazenode[i][j-1],temp,pacman.distancesofar);
-		if(neighbour[2].lose()||(temp==pacman&&ghost==maze.mazenode[i][j+1]))
+		neighbour[2]=new Ghost(maze.mazenode[i][j-1],temp,temp2,pacman.distancesofar);
+		if(neighbour[2].lose()||(temp==pacman&&ghost==maze.mazenode[i][j+1])||(temp2==pacman&&ghost2==maze.mazenode[i+1][j]))
 			neighbour[2].danger=true;
-		neighbour[3]=new Ghost(maze.mazenode[i][j+1],temp,pacman.distancesofar);
-		if(neighbour[3].lose()||(temp==pacman&&ghost==maze.mazenode[i][j-1]))
+		neighbour[3]=new Ghost(maze.mazenode[i][j+1],temp,temp2,pacman.distancesofar);
+		if(neighbour[3].lose()||(temp==pacman&&ghost==maze.mazenode[i][j-1])||(temp2==pacman&&ghost2==maze.mazenode[i+1][j]))
 			neighbour[3].danger=true;		
 		return neighbour;
 	}
@@ -84,7 +88,7 @@ public class Ghost {
 		if(!(obj instanceof Ghost))
 			return false;
 		Ghost sb=(Ghost)obj;
-		if(sb.pacman.equals(this.pacman)&&sb.ghost.equals(this.ghost))
+		if(sb.pacman.equals(this.pacman)&&sb.ghost.equals(this.ghost)&&sb.ghost2.equals(this.ghost2))
 			return true;
 		return false;
 		
@@ -95,6 +99,7 @@ public class Ghost {
 			int result = 1;
 			result = prime * result + pacman.hashCode();
 			result = prime * result + ghost.hashCode();
+			result = prime * result + ghost2.hashCode();
 			return result;
 //	      return result;
 	    }

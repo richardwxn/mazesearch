@@ -60,7 +60,7 @@ public class Main {
 					predecessor.put(node, cur);				
 					frontier.add(node);
 					if(node.equals(maze.end)){
-						System.out.println(nodesnumber);
+						System.out.println("Expanded Nodes Number:"+nodesnumber);
 						return node;
 					}
 					
@@ -151,10 +151,11 @@ public class Main {
 		 * basic pathfinding for dfs, bfs and greedy
 		 * 
 		 */
-//		MazeNode result=test.BFSsearch(maze);		
+////		MazeNode result=test.BFSsearch(maze);		
 //		MazeNode result=test.DFSsearch(maze);
-//		MazeNode result=test.Greedy(maze);
-		
+//////		MazeNode result=test.Greedy(maze);
+//		int nodes=test.printsolution(maze, result);
+//		System.out.print("pathcost:"+nodes);
 	
 //		This part for Astar search with only one dot
 //		AstarSearch astar=new AstarSearch(maze);
@@ -163,18 +164,17 @@ public class Main {
 //		System.out.print("pathcost:"+nodes);
 	    
 //		This part for Astar search with multiple dots
-//		AstarDots astardots=new AstarDots(maze);
-//		State result=astardots.Search(maze);
-//		int nodes=astardots.printsolution(maze, result);
-//		if(result!=null)
-//		System.out.print("pathcost:"+nodes);
-		
+		AstarDots astardots=new AstarDots(maze);
+		State result=astardots.Search(maze);
+		int nodes=astardots.printsolution(maze, result);
+		System.out.print("pathcost:"+nodes);
+//		
 		
 //		This part for Astar search with ghost
-		AstarGhost astarghost=new AstarGhost(maze);
-		Ghost result=astarghost.Search(maze);
-		int nodes=astarghost.printsolution(maze, result);
-		System.out.print("pathcost:"+nodes);
+//		AstarGhost astarghost=new AstarGhost(maze);
+//		Ghost result=astarghost.Search(maze);
+//		int nodes=astarghost.printsolution(maze, result);
+//		System.out.print("pathcost:"+nodes);
 //		System.out.println(result.pacman.i+"\t"+result.pacman.j);
 		
 	}

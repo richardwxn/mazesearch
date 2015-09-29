@@ -43,9 +43,11 @@ public class AstarGhost{
 	
 //		
 		maze.start.distancesofar=0;
-		Ghost start=new Ghost(maze.start,maze.ghostposition,1);
+		Ghost start=new Ghost(maze.start,maze.ghostposition,maze.ghostposition2,0);
 		start.ghost=maze.ghostposition;
+		start.ghost2=maze.ghostposition2;
 		start.ghost.ghostdirection=true;
+		start.ghost.ghostdirection2=true;
 		frontier.add(start);
 		visited.add(start);
 //		pathto.put(start, new ArrayList<Ghost>(Arrays.asList(start)));
@@ -113,18 +115,18 @@ public class AstarGhost{
 		}
 		int count=0;
 		int prev=0;
-		while(!stack.isEmpty()){
-			Ghost target=stack.pop();
-			int index2=(maze.col+1)*target.pacman.i+target.pacman.j;
-			int index3=(maze.col+1)*target.ghost.i+target.ghost.j;
-			copy2.builder.setCharAt(index2, '.');
-			copy2.builder.setCharAt(index3, 'g');
-			if(count>0)
-				copy2.builder.setCharAt(prev, ' ');
-			prev=index3;
-			count++;
-			System.out.println(copy2.builder.toString());
-		}
+//		while(!stack.isEmpty()){
+//			Ghost target=stack.pop();
+//			int index2=(maze.col+1)*target.pacman.i+target.pacman.j;
+//			int index3=(maze.col+1)*target.ghost.i+target.ghost.j;
+//			copy2.builder.setCharAt(index2, '.');
+//			copy2.builder.setCharAt(index3, 'g');
+//			if(count>0)
+//				copy2.builder.setCharAt(prev, ' ');
+//			prev=index3;
+//			count++;
+//			System.out.println(copy2.builder.toString());
+//		}
 //		
 		
 //		for(Ghost target:visited){

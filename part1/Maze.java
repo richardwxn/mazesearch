@@ -22,11 +22,12 @@ public class Maze {
 	MazeNode start;
 	MazeNode end;
 	MazeNode ghostposition;
+	MazeNode ghostposition2;
 	int row=0;
 	int col=0;
 	StringBuilder builder;
 	ArrayList<MazeNode> dot;
-	String filename="/Users/newuser/Documents/CS440AI/bigGhost.txt";
+	String filename="/Users/newuser/Documents/CS440AI/mediumdots.txt";
 	public Maze() throws IOException{
 		dot=new ArrayList<MazeNode>();
 		builder=new StringBuilder();
@@ -53,6 +54,7 @@ public class Maze {
 	BufferedReader br=new BufferedReader(fr);
 	int i=0;
 	String sb;
+	boolean appear=false;
 	while((sb=br.readLine())!=null){	
 		
 		for(int j=0;j<sb.length();j++){
@@ -89,8 +91,17 @@ public class Maze {
 			}
 //			The below branch for games with ghost
 			else if(sb.charAt(j)=='G'){
+				if(appear){
 				ghostposition=new MazeNode(i,j,true);
 				mazenode[i][j]=ghostposition;
+				
+				}
+				else{
+					ghostposition2=new MazeNode(i,j,true);
+					mazenode[i][j]=ghostposition2;
+					appear=true;
+				}
+					
 			}
 			else if(sb.charAt(j)=='g'){
 				mazenode[i][j]=new MazeNode(i,j,true);
@@ -104,6 +115,7 @@ public class Maze {
 	public Maze(Maze copy){
 		this.mazenode=copy.mazenode;
 		this.start=new MazeNode(copy.start);
+		if(copy.end!=null)
 		this.end=new MazeNode(copy.end);
 		this.builder=new StringBuilder(copy.builder);
 		

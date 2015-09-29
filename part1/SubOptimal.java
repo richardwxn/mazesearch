@@ -14,13 +14,13 @@ import java.util.PriorityQueue;
 import java.util.Queue;
 import java.util.Set;
 
-public class AstarDots {
+public class SubOptimal {
 	Queue<State> frontier;
 	Set<State> visited;
 	Map<State,State> predecessor;
 	LinkedHashSet<Integer> dotindex=new LinkedHashSet<Integer>();
 	double distance=0;
-	public AstarDots(Maze maze){
+	public SubOptimal(Maze maze){
 		Comparator<State> comparator=new StateComparator(maze);
 		frontier=new PriorityQueue<State>(maze.row*maze.col,comparator);	
 //		pathto=new HashMap<State,List<State>>();
@@ -35,41 +35,40 @@ public class AstarDots {
 		visited.add(start);
 		System.out.println(start);
 		int nodesnumber=0;
-		State cur=null;
-		while(!frontier.isEmpty()){
-//			Make use of the priorityqueue
-//			System.out.println(nodesnumber);
-//			System.out.println(node.dotposition.size());
+		State cur=start;
+		AstarSearch astar=new AstarSearch(maze);
+		int j=0;
+		while(cur.dotposition.size()!=0){
+			double min=0;
+			Maze copy=new Maze(maze);
+			MazeNode temptail=null;
+			State node;
+			for(int i=0;i<cur.dotposition.size();i++){
+			copy.end=cur.dotposition.get(i);
+			copy.start=cur.pacman;
+			MazeNode result=astar.Search(copy);
+			if(astar.printsolution(copy, result)<min){
+				temptail=cur.dotposition.get(i);
+				min=astar.printsolution(copy, result);
+			}
 			
-			cur=frontier.poll();
-//			if(cur.dotposition.contains(cur.pacman))
-//				System.out.println(cur.dotposition.size());
+			}
+			cur.dotposition.remove(temptail);
+			node=new State(copy.end,cur.dotposition,nodesnumber);
 			nodesnumber++;
 			visited.add(cur);
 			if(maze.mazenode[cur.pacman.i][cur.pacman.j].isdot())
 				dotindex.add((maze.col+1)*cur.pacman.i+cur.pacman.j);
-//			System.out.println(visited.size());
-//			System.out.println(cur);
 
-			distance++;
-			for(State node:cur.setneighbour(maze)){
-//				State node=new State(node);
-				if(node.empty&&!visited.contains(node)){
-					node.distancesofar=cur.distancesofar+1;
-					frontier.add(node);
-					
-					predecessor.put(node, cur);
-					
-						
 					if(node.dotposition.size()==0){
 						dotindex.add((maze.col+1)*node.pacman.i+node.pacman.j);
 						System.out.println("Expanded Nodes Number:"+nodesnumber);
 						return node;
 					}
-				}
+				
 			}
 			
-		}
+		
 		if(dotindex.size()==start.dotposition.size()){
 			System.out.println("Expanded Nodes Number:"+nodesnumber);
 			return cur;
@@ -77,7 +76,7 @@ public class AstarDots {
 		else
 			return null;
 		}
-		
+	
 	public int printsolution(Maze maze, State result){
 //		File file=new File()
 		int distance = 0;

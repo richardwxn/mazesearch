@@ -5,7 +5,7 @@ import java.util.Comparator;
 public class Newcomparator implements Comparator<MazeNode>{
 	Maze maze;
 	public Newcomparator(Maze maze){
-		this.maze=maze;
+		this.maze=new Maze(maze);
 	}
 
 	

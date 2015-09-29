@@ -15,6 +15,7 @@ public class MazeNode{
 //	}
 //	double heuristic;
 	boolean ghostdirection=true;
+	boolean ghostdirection2=true;
 	double distancesofar=0;
 	double costofdirection=0;
 	MazeNode [] neighbour;
@@ -30,6 +31,7 @@ public class MazeNode{
 		this.empty=node.empty;
 		this.dot=node.dot;
 		this.ghostdirection=node.ghostdirection;
+		this.ghostdirection2=node.ghostdirection2;
 	}
 	public boolean gettype(){
 		return empty;
@@ -61,6 +63,28 @@ public class MazeNode{
 			}
 		}
 	}
+	public MazeNode move2(Maze maze){
+		if(ghostdirection2){
+			if(maze.mazenode[i+1][j].empty)
+				return new MazeNode(i+1,j,true);
+			else{
+				MazeNode temp=new MazeNode(i-1,j,true);
+				temp.ghostdirection2=false;
+				return temp;
+			}
+		}
+		else{
+			if(maze.mazenode[i-1][j].empty){
+				MazeNode temp2=new MazeNode(i-1,j,true);
+				temp2.ghostdirection2=false;
+				return temp2;
+			}
+			else{
+				return new MazeNode(i+1,j,true);
+				
+			}
+		}
+	}
 	
 	
 // Calculate heuristics
@@ -70,7 +94,7 @@ public class MazeNode{
 	
 	public double calculateNewheuristic(Maze maze){
 //		need to add the previous solution when calculate
-		return calculateheuristic(maze)+distancesofar;	
+		return costofdirection+calculateheuristic(maze)+distancesofar;	
 	}
 //	
 
@@ -92,7 +116,7 @@ public class MazeNode{
 //		neighbour[3]=new MazeNode(maze.mazenode[i][j-1]);	
 		neighbour[3].direction=false;
 		for(int i=0;i<4;i++)
-			neighbour[i].costofdirection=(this.direction!=neighbour[i].direction?1:1);
+			neighbour[i].costofdirection=(this.direction!=neighbour[i].direction?3:2);
 //			neighbour[i].costofdirection=0;
 		return neighbour;
 	}

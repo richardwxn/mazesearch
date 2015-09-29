@@ -30,28 +30,52 @@ public class State {
 
 	public double calculateheuristic(Maze maze){	
 		MazeNode temp=new MazeNode(pacman.i,pacman.j,true);
+		AstarSearch astar=new AstarSearch(maze);
 		double min=Integer.MAX_VALUE;
-		double max=Integer.MIN_VALUE;
-		double mintoend=Integer.MAX_VALUE;
+		double realmin=Integer.MIN_VALUE;
+//		double max=Integer.MIN_VALUE;
+//		double mintoend=Integer.MAX_VALUE;
 		double sum=0;
+		Maze mazecopy=new Maze(maze);
 		for(MazeNode dot:this.dotposition){
-			min=Math.min(manhattendistance(pacman,dot), min);
-		}
-		for(MazeNode dot:this.dotposition){
-			if(manhattendistance(pacman,dot)>max)
-				temp=new MazeNode(dot);
-			max=Math.max(manhattendistance(pacman,dot), max);
+//			min=Math.min(manhattendistance(pacman,dot), min);	
+			mazecopy.start=new MazeNode(pacman);
+			mazecopy.end=new MazeNode(dot);
+			MazeNode result=astar.Search(mazecopy);
+			realmin=Math.max(astar.printsolution(mazecopy, result),realmin);
 		}
 		
+//		for(MazeNode dot:this.dotposition){
+//			if(manhattendistance(pacman,dot)>max)
+//				temp=new MazeNode(dot);
+//			max=Math.max(manhattendistance(pacman,dot), max);
+//		}
+		
 		for(MazeNode dot:this.dotposition){
-			mintoend=Math.min(manhattendistance(pacman,maze.end), min);
+//			mintoend=Math.min(manhattendistance(pacman,maze.end), min);
 			sum+=manhattendistance(temp, dot);
 		}
-		
+//		double smin=Integer.MAX_VALUE;
+//		for(MazeNode dot:dotposition){
+//			for(MazeNode other:dotposition){
+//				if(!other.equals(dot)){
+////					mazecopy.end=new MazeNode(dot);
+////					mazecopy.start=new MazeNode(pacman);
+////					astar.Search(mazecopy);			
+////					mazecopy.end=new MazeNode(dot);
+////					MazeNode result=astar.Search(mazecopy);
+//					smin=Math.min(manhattendistance(other, dot),smin);
+////					smin=Math.min(astar.printsolution(mazecopy, result),smin);
+//				}
+//			}
+//			
+//			sum+=smin;
+//			smin=Integer.MAX_VALUE;
+//		}
 //		return manhattendistance(temp, maze.end)+max+dotposition.size()+distancesofar;
-		return 1.1*sum+dotposition.size()+distancesofar;
+		return 1.1*realmin+dotposition.size()-1+distancesofar;
 	}
-	
+
 	public double manhattendistance(MazeNode pacman,MazeNode dot){
 		return Math.abs(dot.i-pacman.i)+Math.abs(dot.j-pacman.j);
 	}
@@ -150,21 +174,31 @@ public class State {
 		if(!(obj instanceof State))
 			return false;
 		State sb=(State)obj;
-//		if(sb.pacman.equals(this.pacman)&&sb.dotposition.containsAll(this.dotposition)&&this.dotposition.containsAll(sb.dotposition))
+		
 			
-		if(sb.pacman.equals(this.pacman)&&sb.dotposition.size()==this.dotposition.size())
-			return true;
-		return false;
+//		if(sb.pacman.equals(this.pacman)&&sb.dotposition.size()==this.dotposition.size())
+//			if(sb.pacman.equals(this.pacman)&&sb.dotposition.containsAll(this.dotposition)&&this.dotposition.containsAll(sb.dotposition)){
+//				System.out.println(sb.dotposition+"\t\t"+this.dotposition);
+//			if(sb.pacman.equals(this.pacman)&&sb.dotposition.size()==this.dotposition.size()){
+				for(int i=0;i<this.dotposition.size();i++){
+					if(!sb.dotposition.contains(this.dotposition.get(i)))
+						return false;		
+				}
+				return true;
+//			}
+//		return false;
 		
 	}
 	  @Override
 	    public int hashCode() {
-//		  final int prime = 31;
-//			int result = 1;
-//			result = prime * result + pacman.hashCode();
-//			result = prime * result + dotposition.hashcode();
-			return pacman.hashCode();
-//	      return result;
+		  final int prime = 31;
+			int result = 1;
+			result = prime * result + pacman.hashCode();
+			result = prime * result + dotposition.size();
+			return result;
+//			return pacman.hashCode();
+//		return 	(int) (100*Math.random());
+//	      return 1;
 	    }
 	
 }
